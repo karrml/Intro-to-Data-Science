@@ -1,0 +1,24 @@
+---
+title: "01-assignment_Karr"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## R Markdown
+
+```{r}
+print("hello world")
+
+load("C:/Users/karrm/Dropbox/Work/Vanderbilt/8200 Intro to Data Science/college.Rdata")
+View(sc)
+
+## What's the average median debt?
+sc%>%summarize(mean_debt=mean(debt_mdn,na.rm=TRUE))
+```
+
