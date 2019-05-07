@@ -10,15 +10,66 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-## R Markdown
+## Q1 and Q2
 
 ```{r}
+
+## Q1
 print("hello world")
 
-load("C:/Users/karrm/Dropbox/Work/Vanderbilt/8200 Intro to Data Science/college.Rdata")
+load("C:/Users/mkarr/Dropbox/Work/Vanderbilt/8200 Intro to Data Science/college.Rdata")
 View(sc)
 
-## What's the average median debt?
+## Q2 What's the average median debt?
 sc%>%summarize(mean_debt=mean(debt_mdn,na.rm=TRUE))
 ```
+## Extra Q1
 
+```{r combining commands}
+## What's the average earnings for very selective schools?
+sc%>%filter(adm_rate<.1)%>%summarize(mean_earn=mean(md_earn_wne_p6,na.rm=TRUE))
+
+## And for not very selective schools?
+sc%>%filter(adm_rate>.3)%>%summarize(mean_earn=mean(md_earn_wne_p6,na.rm=TRUE))
+```
+
+## Extra Q2
+
+```{r combining commands}
+## What's the average earnings for very selective schools?
+sc%>%filter(sat_avg>1400)%>%summarize(mean_size=mean(ugds,na.rm=TRUE))
+
+## And for not very selective schools?
+sc%>%filter(sat_avg<1100)%>%summarize(mean_size=mean(ugds,na.rm=TRUE))
+```
+
+## Extra Q3
+
+```{r}
+
+## filter for only echools thaht have entries for both fields
+
+scc <- sc [which (sc$costt4_a >0 & sc$debt_mdn > 0),]
+
+plot(scc$debt_mdn, scc$costt4_a, xlab = "Debt", ylab = "Cost")
+
+```
+There appears to be a slight positive relationship between cost of college and debt.  This makes sense.
+
+## Extra Q4
+
+```{r}
+
+## create data sets for each group of school
+
+sc1 <- scc [which (scc$control == 1),]
+sc2 <- scc [which (scc$control == 2),]
+sc3 <- scc [which (scc$control == 3),]
+
+plot(sc1$debt_mdn, sc1$costt4_a, main = "Public Schools", xlab = "Debt", ylab = "Cost")
+plot(sc2$debt_mdn, sc2$costt4_a, main = "Private Non-Profits", xlab = "Debt", ylab = "Cost")
+plot(sc3$debt_mdn, sc3$costt4_a, main = "Public For-Profits", xlab = "Debt", ylab = "Cost")
+
+```
+
+Public Schools show a more linear positive relationship, as cheaper schools tend to have students leave with less debt.  In the case of the private non-profit schools, many of them are at very high cost levels, yet wealthier families tend to send their kids to these schools, and they typically have larger endowments and can provide more financial aid.  Thus, many of these more expensive schools can keep their student debt levels down.  Vanderbilt, for example, has a "no-debt pledge," meaning they typically provide grants for all need beyond expected family contribution.
